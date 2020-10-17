@@ -189,7 +189,27 @@ class Set (LoggingObject):
         self.live.cmd("/live/tempo", value)
 
     tempo = property(get_tempo, set_tempo, doc="Global tempo")
-    
+
+
+    @name_cache
+    def get_numerator(self):
+        return self.live.query("/live/timeSignature")[0]
+
+    def set_numerator(self, value):
+        self.live.cmd("/live/setNumerator", value)
+
+    @name_cache
+    def get_denominator(self):
+        return self.live.query("/live/timeSignature")[1]
+
+    def set_denominator(self, value):
+        self.live.cmd("/live/setDenominator", value)
+
+    numerator = property(get_numerator, set_numerator, doc="Time Signature numerator")
+
+    denominator = property(get_denominator, set_denominator, doc="Time Signature denominator")
+
+
     #------------------------------------------------------------------------
     # /live/quantization
     #------------------------------------------------------------------------
