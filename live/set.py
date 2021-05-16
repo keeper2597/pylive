@@ -238,6 +238,14 @@ class Set (LoggingObject):
 
     time = property(get_time, set_time, doc="Current time position (beats)")
 
+    def get_beatTime(self):
+        """ Return the current BeatTime object as a list"""
+        return self.live.query("/live/beatTime")
+
+    def get_beat(self):
+        """ return the current beat count (ie 1, 2, 3, or 4)"""
+        return self.get_beatTime()[1]
+
     #------------------------------------------------------------------------
     # /live/overdub
     # (uses /live/state to query)
@@ -310,7 +318,8 @@ class Set (LoggingObject):
         self.live.cmd("/live/play/clipslot", track_index, clip_index)
 
     def play_scene(self, scene_index):
-        self.live.cmd("/live/play/scene", scene_index)
+        # self.live.cmd("/live/play/scene", scene_index)
+        self.live.cmd("/live/scene/play", scene_index) #flipped in LiveOSC2?
 
     #------------------------------------------------------------------------
     # /live/stop
@@ -323,6 +332,9 @@ class Set (LoggingObject):
 
     def stop_clip(self, track_index, clip_index):
         self.live.cmd("/live/stop/clip", track_index, clip_index)
+
+    def stop_all_clips(self):
+        self.live.cmd("/live/stopclips")
 
     def stop_track(self, track_index):
         self.live.cmd("/live/stop/track", track_index)
@@ -918,6 +930,12 @@ class Set (LoggingObject):
 
     def set_beat_callback(self, callback):
         self.live.beat_callback = callback
+
+    def set_downbeat_callback(self, callback):
+        self.live.downbeat_callback = callback
+
+    def set_beatTime_callback(self, callback):
+        self.live.beatTime_callback = callback
 
     def startup_callback(self):
         self._startup_event.set()

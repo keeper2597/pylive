@@ -40,8 +40,10 @@ class Query(LoggingObject):
         live.cmd(path, *args)
     """
 
-    def __init__(self, address=("localhost", 9000), listen_port=9001):
+    def __init__(self, address=("localhost", 9001), listen_port=9000):
         self.beat_callback = None
+        self.downbeat_callback = None
+        self.beatTime_callback = None
         self.startup_callback = None
         self.listen_port = listen_port
 
@@ -195,8 +197,26 @@ class Query(LoggingObject):
             if self.startup_callback is not None:
                 self.startup_callback()
 
+        elif address == "/live/beatTime":
+            self.log_debug("beatTime received")
+            self.log_debug(data[1])
+
+            if self.beatTime_callback is not None:
+                self.beatTime_callback(data[1])
+
+            if self.downbeat_callback is not None:
+                if (data[1] == '01'): # a down beat
+                    self.downbeat_callback()
+
+
     def add_handler(self, address, handler):
         if not address in self.handlers:
             self.handlers[address] = []
         self.handlers[address].append(handler)
+
+    def rem_handler(self, address, handler):
+        if address in self.handlers:
+            for existing_handler in self.handlers[address]:
+                if existing_handler == handler:
+                    self.handlers[address].remove(handler)
 

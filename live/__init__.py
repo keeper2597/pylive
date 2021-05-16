@@ -27,7 +27,7 @@ clip.play()
 __author__ = "Daniel Jones <http://www.erase.net/>"
 __all__ = [ "Query", "Set", "Track", "Group", "Clip", "Device", "Parameter", "Scene" ]
 
-debug = False
+debug = True
 
 from .object import *
 from .constants import *
