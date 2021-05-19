@@ -393,11 +393,11 @@ class Set (LoggingObject):
 
     def get_scene_name(self, index):
         """ Return the name of the scene given by index. """
-        return self.live.query("/live/name/scene", index)
+        return self.live.query("/live/scene/name", index)
 
     def set_scene_name(self, index, name):
         """ Set the name of a scene. """
-        self.live.cmd("/live/name/scene", index, name)
+        self.live.cmd("/live/scene/name", index, name)
 
     #------------------------------------------------------------------------
     # /live/name/track
@@ -408,7 +408,7 @@ class Set (LoggingObject):
         """ Return all track names. If offset and count are given, return names
         within this range. """
         if count is None:
-            rv = self.live.query("/live/name/track")
+            rv = self.live.query("/live/track/name")
             rv = [ rv[a] for a in range(1, len(rv), 2) ]
             return rv
         else:
@@ -423,11 +423,11 @@ class Set (LoggingObject):
 
     def get_track_name(self, index):
         """ Return a given track's name. """
-        return self.live.query("/live/name/track", index)
+        return self.live.query("/live/track/name", index)
 
     def set_track_name(self, index, value):
         """ Set a given track's name. """
-        self.live.cmd("/live/name/track", index, value)
+        self.live.cmd("/live/track/name", index, value)
 
     #------------------------------------------------------------------------
     # /live/name/clip
@@ -440,11 +440,11 @@ class Set (LoggingObject):
 
     def get_clip_name(self, track, index):
         """ Return a specific clip name. """
-        return self.live.query("/live/name/clip", track, index)[2]
+        return self.live.query("/live/clip/name", track, index)[2]
 
     def set_clip_name(self, track, index, name):
         """ Set a given clip's name. """
-        self.live.cmd("/live/name/clip", track, index, name)
+        self.live.cmd("/live/clip/name", track, index, name)
 
 
     #------------------------------------------------------------------------
@@ -613,22 +613,25 @@ class Set (LoggingObject):
     #------------------------------------------------------------------------
 
     def get_device_list(self, track_index):
-        return self.live.query("/live/devicelist", track_index)
+        # return self.live.query("/live/devicelist", track_index)
+        return self.live.query("/live/track/devices", track_index)
 
     def get_device_parameters(self, track_index, device_index):
-        return self.live.query("/live/device", track_index, device_index, response_address="/live/device/allparam")
+        # return self.live.query("/live/device", track_index, device_index, response_address="/live/device/allparam")
+        return self.live.query("/live/track/device/param", track_index, device_index)
 
-    def get_device_param(self, track_index, device_index, param_index):
-        return self.live.query("/live/device", track_index, device_index, param_index, response_address="/live/device/param")
+    def get_device_parameter(self, track_index, device_index, param_index):
+        # return self.live.query("/live/device", track_index, device_index, param_index, response_address="/live/device/param")
+        return self.live.query("/live/track/device/param", track_index, device_index, param_index)
 
-    def set_device_param(self, track_index, device_index, param_index, value):
-        self.live.cmd("/live/device", track_index, device_index, param_index, value)
+    def set_device_parameter(self, track_index, device_index, param_index, value):
+        self.live.cmd("/live/track/device/param", track_index, device_index, param_index, value)
 
     def get_device_parameter_ranges(self, track_index, device_index):
-        return self.live.query("/live/device/range", track_index, device_index)
+        return self.live.query("/live/track/device/range", track_index, device_index)
 
     def get_device_parameter_range(self, track_index, device_index, parameter_index):
-        return self.live.query("/live/device/range", track_index, device_index, parameter_index)
+        return self.live.query("/live/track/device/range", track_index, device_index, parameter_index)
 
 
     #------------------------------------------------------------------------
